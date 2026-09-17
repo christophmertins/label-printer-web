@@ -1,0 +1,102 @@
+{
+  "name": "Versandetikett",
+  "file": "versandetikett",
+  "label_id": "62x100",
+  "label_length_mm": 100,
+  "elements": [
+    {
+      "id": "el_versand_1",
+      "type": "text",
+      "x_mm": 2,
+      "y_mm": 3,
+      "w_mm": 54,
+      "h_mm": 12,
+      "rotation_deg": 0,
+      "props": {
+        "text": "Max Mustermann",
+        "fontFamily": "sans",
+        "bold": true,
+        "italic": false,
+        "fontsize_mm": 10,
+        "color": "#000000",
+        "align": "left",
+        "valign": "top",
+        "lineHeight": 1.1
+      }
+    },
+    {
+      "id": "el_versand_2",
+      "type": "text",
+      "x_mm": 2,
+      "y_mm": 17,
+      "w_mm": 54,
+      "h_mm": 30,
+      "rotation_deg": 0,
+      "props": {
+        "text": "Musterstraße 12\n12345 Musterstadt\nDeutschland",
+        "fontFamily": "sans",
+        "bold": false,
+        "italic": false,
+        "fontsize_mm": 5.2,
+        "color": "#000000",
+        "align": "left",
+        "valign": "top",
+        "lineHeight": 1.4
+      }
+    },
+    {
+      "id": "el_versand_3",
+      "type": "text",
+      "x_mm": 2,
+      "y_mm": 82,
+      "w_mm": 37,
+      "h_mm": 8,
+      "rotation_deg": 0,
+      "props": {
+        "text": "Bestell-Nr. 2026-0001",
+        "fontFamily": "sans",
+        "bold": false,
+        "italic": false,
+        "fontsize_mm": 4,
+        "color": "#000000",
+        "align": "left",
+        "valign": "top",
+        "lineHeight": 1.1
+      }
+    },
+    {
+      "id": "el_versand_4",
+      "type": "qr",
+      "x_mm": 42,
+      "y_mm": 76,
+      "w_mm": 15,
+      "h_mm": 15,
+      "rotation_deg": 0,
+      "props": {
+        "value": "https://example.com/track?id=12345",
+        "ecl": "M",
+        "quiet": 4
+      }
+    },
+    {
+      "id": "el_versand_5",
+      "type": "text",
+      "x_mm": 2,
+      "y_mm": 56,
+      "w_mm": 37,
+      "h_mm": 20,
+      "rotation_deg": 0,
+      "props": {
+        "text": "Paket 1 von 1\nGewicht: 1,2 kg",
+        "fontFamily": "sans",
+        "bold": false,
+        "italic": false,
+        "fontsize_mm": 4,
+        "color": "#000000",
+        "align": "left",
+        "valign": "top",
+        "lineHeight": 1.4
+      }
+    }
+  ]
+}

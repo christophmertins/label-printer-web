@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Etiketten-Studio</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/app.css') }}">
+</head>
+<body>
+  <header>
+    <div class="brand">Etiketten<span>-Studio</span></div>
+    <div class="printer-status" id="printerStatus" title="Drucker-Status">
+      <span class="dot" id="printerDot"></span>
+      <span id="printerLabel">Drucker wird geprüft…</span>
+    </div>
+    <div class="header-actions">
+      <button id="btnPreview" class="btn">Vorschau</button>
+      <button id="btnPrint" class="btn btn-primary">Drucken</button>
+    </div>
+  </header>
+
+  <section class="toolbar">
+    <div class="tool-group">
+      <button class="btn add-tool" data-tool="text" title="Textelement hinzufügen">Text</button>
+      <button class="btn add-tool" data-tool="qr" title="QR-Code-Element hinzufügen">QR-Code</button>
+      <button class="btn add-tool" data-tool="image" title="Bild hochladen und einfügen">Bild</button>
+      <input type="file" id="imageInput" accept="image/*" hidden>
+    </div>
+
+    <div class="tool-group">
+      <label for="labelSelect">Etikett</label>
+      <select id="labelSelect"></select>
+      <label for="lengthInput" id="lengthField">Länge (mm)</label>
+      <input type="number" id="lengthInput" min="10" max="1000" step="5" value="60" disabled>
+    </div>
+
+    <div class="tool-group template-group">
+      <select id="templateSelect" title="Gespeicherte Vorlagen"><option value="">— Vorlage wählen —</option></select>
+      <button id="btnLoadTemplate" class="btn" disabled>Laden</button>
+      <button id="btnSaveTemplate" class="btn">Speichern</button>
+      <button id="btnDeleteTemplate" class="btn" disabled>Löschen</button>
+      <button id="btnNewDoc" class="btn">Neu</button>
+    </div>
+  </section>
+
+  <main>
+    <aside class="panel layers-panel">
+      <h3>Elemente</h3>
+      <ul id="layerList"></ul>
+      <div class="layer-btns">
+        <button id="btnUp" class="btn" title="Element nach vorne">▲</button>
+        <button id="btnDown" class="btn" title="Element nach hinten">▼</button>
+        <button id="btnDuplicate" class="btn">Kopieren</button>
+        <button id="btnDeleteEl" class="btn btn-danger">Löschen</button>
+      </div>
+    </aside>
+
+    <section class="stage-wrap" id="stageWrap">
+      <div class="ruler-hint" id="sizeHint"></div>
+      <canvas id="canvas"></canvas>
+    </section>
+
+    <aside class="panel props-panel">
+      <h3>Eigenschaften</h3>
+      <div id="propsPanel" class="props-empty">Wähle ein Element aus.<br>Klicke auf der Etikette oder in die Liste.</div>
+    </aside>
+  </main>
+
+  <div id="toast" class="toast"></div>
+  <div id="modal" class="modal hidden">
+    <div class="modal-box">
+      <div class="modal-title" id="modalTitle"></div>
+      <div class="modal-body" id="modalBody"></div>
+      <div class="modal-actions">
+        <button id="modalOk" class="btn btn-primary">OK</button>
+        <button id="modalCancel" class="btn">Abbrechen</button>
+      </div>
+    </div>
+  </div>
+  <div id="previewModal" class="modal hidden">
+    <div class="modal-box wide">
+      <div class="modal-title">Druckvorschau (300 dpi)</div>
+      <div class="modal-body">
+        <div id="previewInfo" class="preview-info"></div>
+        <div class="preview-scroll"><img id="previewImg" alt="Druckvorschau"></div>
+      </div>
+      <div class="modal-actions">
+        <button id="previewClose" class="btn">Schließen</button>
+        <button id="previewPrint" class="btn btn-primary">Drucken</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="{{ url_for('static', filename='js/qrcode.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/render.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/editor.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>

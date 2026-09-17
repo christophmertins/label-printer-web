@@ -1,0 +1,28 @@
+{
+  "name": "Kabel-Etikett",
+  "file": "kabel-etikett",
+  "label_id": "12",
+  "label_length_mm": 60,
+  "elements": [
+    {
+      "id": "el_kabel_1",
+      "type": "text",
+      "x_mm": 1,
+      "y_mm": 4,
+      "w_mm": 7,
+      "h_mm": 52,
+      "rotation_deg": 0,
+      "props": {
+        "text": "Kabel 1\nsw01-p24",
+        "fontFamily": "sans",
+        "bold": false,
+        "italic": false,
+        "fontsize_mm": 3.2,
+        "color": "#000000",
+        "align": "center",
+        "valign": "top",
+        "lineHeight": 1.4
+      }
+    }
+  ]
+}

@@ -1,0 +1,82 @@
+{
+  "name": "Asset-Etikett",
+  "file": "asset-etikett",
+  "label_id": "62",
+  "label_length_mm": 60,
+  "elements": [
+    {
+      "id": "el_asset_1",
+      "type": "qr",
+      "x_mm": 3,
+      "y_mm": 4,
+      "w_mm": 26,
+      "h_mm": 26,
+      "rotation_deg": 0,
+      "props": {
+        "value": "https://example.com/asset/0042",
+        "ecl": "M",
+        "quiet": 4
+      }
+    },
+    {
+      "id": "el_asset_2",
+      "type": "text",
+      "x_mm": 33,
+      "y_mm": 8,
+      "w_mm": 24,
+      "h_mm": 12,
+      "rotation_deg": 0,
+      "props": {
+        "text": "Rack A-03",
+        "fontFamily": "sans",
+        "bold": true,
+        "italic": false,
+        "fontsize_mm": 8,
+        "color": "#000000",
+        "align": "left",
+        "valign": "top",
+        "lineHeight": 1.1
+      }
+    },
+    {
+      "id": "el_asset_3",
+      "type": "text",
+      "x_mm": 33,
+      "y_mm": 22,
+      "w_mm": 24,
+      "h_mm": 8,
+      "rotation_deg": 0,
+      "props": {
+        "text": "Inventar-Nr. 0042",
+        "fontFamily": "sans",
+        "bold": false,
+        "italic": false,
+        "fontsize_mm": 4,
+        "color": "#000000",
+        "align": "left",
+        "valign": "top",
+        "lineHeight": 1.1
+      }
+    },
+    {
+      "id": "el_asset_4",
+      "type": "text",
+      "x_mm": 3,
+      "y_mm": 34,
+      "w_mm": 54,
+      "h_mm": 8,
+      "rotation_deg": 0,
+      "props": {
+        "text": "Zuletzt geprüft: 15.09.2026",
+        "fontFamily": "mono",
+        "bold": false,
+        "italic": false,
+        "fontsize_mm": 3.8,
+        "color": "#000000",
+        "align": "left",
+        "valign": "top",
+        "lineHeight": 1.1
+      }
+    }
+  ]
+}

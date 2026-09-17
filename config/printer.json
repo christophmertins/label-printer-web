@@ -1,0 +1,12 @@
+{
+  "model": "QL-500",
+  "backend": "pyusb",
+  "printer": "",
+  "dither": false,
+  "threshold": 70,
+  "compress": true,
+  "dpi_600": false,
+  "hq": true,
+  "cut": true,
+  "rotate": "auto"
+}

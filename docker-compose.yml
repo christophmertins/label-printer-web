@@ -1,0 +1,21 @@
+services:
+  label-printer-web:
+    build: .
+    image: label-printer-web:latest
+    container_name: label-printer-web
+    restart: unless-stopped
+    ports:
+      - "5001:5001"
+    # USB-Passthrough für den Brother QL-500 (Linux-Hosts).
+    # Hinweis macOS: Docker Desktop leitet USB standardmäßig NICHT durch.
+    # Siehe README -> Abschnitt "Drucker im Docker-Container".
+    devices:
+      - "/dev/bus/usb:/dev/bus/usb"
+    privileged: true
+    volumes:
+      - ./config:/app/config
+      - ./templates:/app/templates
+    environment:
+      - BROTHER_MODEL=QL-500
+      - BROTHER_BACKEND=pyusb
+      # - BROTHER_PRINTER=usb://0x04f9:0x2015   # optional, sonst Auto-Erkennung

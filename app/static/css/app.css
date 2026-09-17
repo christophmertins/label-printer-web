@@ -1,0 +1,164 @@
+@font-face{font-family:'Label Sans';src:url('../fonts/DejaVuSans.ttf');font-weight:400;font-style:normal;font-display:swap}
+@font-face{font-family:'Label Sans';src:url('../fonts/DejaVuSans-Oblique.ttf');font-weight:400;font-style:italic;font-display:swap}
+@font-face{font-family:'Label Sans';src:url('../fonts/DejaVuSans-Bold.ttf');font-weight:700;font-style:normal;font-display:swap}
+@font-face{font-family:'Label Sans';src:url('../fonts/DejaVuSans-BoldOblique.ttf');font-weight:700;font-style:italic;font-display:swap}
+@font-face{font-family:'Label Serif';src:url('../fonts/DejaVuSerif.ttf');font-weight:400;font-style:normal;font-display:swap}
+@font-face{font-family:'Label Serif';src:url('../fonts/DejaVuSerif-Italic.ttf');font-weight:400;font-style:italic;font-display:swap}
+@font-face{font-family:'Label Serif';src:url('../fonts/DejaVuSerif-Bold.ttf');font-weight:700;font-style:normal;font-display:swap}
+@font-face{font-family:'Label Serif';src:url('../fonts/DejaVuSerif-BoldItalic.ttf');font-weight:700;font-style:italic;font-display:swap}
+@font-face{font-family:'Label Mono';src:url('../fonts/DejaVuSansMono.ttf');font-weight:400;font-style:normal;font-display:swap}
+@font-face{font-family:'Label Mono';src:url('../fonts/DejaVuSansMono-Bold.ttf');font-weight:700;font-style:normal;font-display:swap}
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+:root{
+  --c-bg:#f5f5f5;
+  --c-surface:#fff;
+  --c-border:#d1d5db;
+  --c-primary:#2563eb;
+  --c-primary-hover:#1d4ed8;
+  --c-danger:#dc2626;
+  --c-text:#111827;
+  --c-muted:#6b7280;
+  --r:6px;
+  --shadow:0 1px 3px rgba(0,0,0,.08),0 1px 2px rgba(0,0,0,.06);
+}
+
+html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;font-size:14px;color:var(--c-text);background:var(--c-bg)}
+
+button,input,select,textarea{font:inherit}
+
+/* ── header ────────────────────────────────────────────── */
+header{
+  display:flex;align-items:center;gap:16px;
+  padding:8px 16px;background:var(--c-surface);border-bottom:1px solid var(--c-border);
+  position:relative;z-index:10;
+}
+.brand{font-size:18px;font-weight:700;letter-spacing:.3px}
+.brand span{font-weight:400;color:var(--c-muted)}
+.printer-status{display:flex;align-items:center;gap:6px;margin-left:auto;font-size:13px;color:var(--c-muted)}
+.dot{width:9px;height:9px;border-radius:50%;background:var(--c-muted)}
+.dot.on{background:#16a34a}
+.dot.off{background:#dc2626}
+.header-actions{display:flex;gap:8px}
+
+/* ── buttons ───────────────────────────────────────────── */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:6px;
+  padding:6px 14px;border:1px solid var(--c-border);border-radius:var(--r);
+  background:var(--c-surface);cursor:pointer;font-size:13px;white-space:nowrap;
+  transition:background .12s,border-color .12s;
+}
+.btn:hover{background:#e5e7eb;border-color:#9ca3af}
+.btn:disabled{opacity:.45;cursor:default}
+.btn-primary{background:var(--c-primary);color:#fff;border-color:var(--c-primary)}
+.btn-primary:hover{background:var(--c-primary-hover);border-color:var(--c-primary-hover)}
+.btn-danger{color:var(--c-danger);border-color:#fca5a5}
+.btn-danger:hover{background:#fef2f2}
+
+/* ── toolbar ───────────────────────────────────────────── */
+.toolbar{
+  display:flex;flex-wrap:wrap;align-items:center;gap:12px;
+  padding:8px 16px;background:var(--c-surface);border-bottom:1px solid var(--c-border);
+}
+.tool-group{display:flex;align-items:center;gap:6px}
+.tool-group label{font-size:12px;color:var(--c-muted);white-space:nowrap}
+.tool-group select,.tool-group input[type=number]{
+  border:1px solid var(--c-border);border-radius:var(--r);padding:5px 8px;
+  font-size:13px;background:#fff;
+}
+#lengthInput{width:72px}
+.template-group{margin-left:auto}
+
+/* ── main layout ──────────────────────────────────────── */
+main{
+  display:flex;flex:1;overflow:hidden;height:calc(100vh - 94px);
+}
+
+/* ── side panels ──────────────────────────────────────── */
+.panel{background:var(--c-surface);border-right:1px solid var(--c-border);overflow-y:auto;flex-shrink:0}
+.layers-panel{width:210px}
+.props-panel{width:260px;border-right:0;border-left:1px solid var(--c-border)}
+.panel h3{padding:10px 12px 6px;font-size:12px;text-transform:uppercase;letter-spacing:.5px;color:var(--c-muted)}
+
+#layerList{list-style:none;padding:0 6px}
+#layerList li{
+  display:flex;align-items:center;gap:6px;
+  padding:6px 8px;border-radius:var(--r);cursor:pointer;font-size:13px;
+  border:1px solid transparent;
+}
+#layerList li:hover{background:#f3f4f6}
+#layerList li.selected{background:#eff6ff;border-color:var(--c-primary);color:var(--c-primary);font-weight:600}
+#layerList .el-icon{flex-shrink:0;width:18px;text-align:center;opacity:.6}
+
+.layer-btns{display:flex;gap:4px;padding:6px 8px;flex-wrap:wrap}
+.layer-btns .btn{flex:1;padding:5px 0;font-size:12px}
+
+/* ── props panel ──────────────────────────────────────── */
+.props-empty{padding:14px 12px;color:var(--c-muted);font-size:13px;line-height:1.5}
+.prop-section{padding:0 12px 10px}
+.prop-section h4{font-size:11px;text-transform:uppercase;letter-spacing:.4px;color:var(--c-muted);margin:12px 0 4px}
+.prop-row{display:flex;align-items:center;gap:6px;margin-bottom:6px}
+.prop-row label{width:50px;font-size:11px;color:var(--c-muted);text-align:right;flex-shrink:0}
+.prop-row input,.prop-row select,.prop-row textarea{
+  flex:1;border:1px solid var(--c-border);border-radius:var(--r);padding:4px 6px;font-size:13px;
+}
+.prop-row textarea{resize:vertical;min-height:48px}
+.prop-row input[type=number]{width:0}
+.prop-row-sm{gap:4px}
+.prop-row-sm label{width:32px}
+.prop-row-sm input{width:0}
+.prop-row-sm .btn{padding:4px 8px;font-size:12px}
+.prop-btn-group{display:flex;gap:2px}
+.prop-btn-group .btn{padding:4px 8px;font-size:12px}
+.prop-btn-group .btn.active{background:var(--c-primary);color:#fff;border-color:var(--c-primary)}
+
+/* ── canvas stage ─────────────────────────────────────── */
+.stage-wrap{
+  flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:20px;overflow:auto;background:var(--c-bg);position:relative;
+}
+.ruler-hint{font-size:11px;color:var(--c-muted);margin-bottom:8px}
+#canvas{
+  background:#fff;box-shadow:var(--shadow),0 0 0 1px rgba(0,0,0,.04);border-radius:2px;
+  cursor:crosshair;image-rendering:pixelated; /* crisp at 1:1 */
+}
+
+/* ── toast ─────────────────────────────────────────────── */
+.toast{
+  position:fixed;bottom:20px;right:20px;max-width:340px;
+  padding:10px 16px;border-radius:var(--r);font-size:13px;
+  background:#111827;color:#fff;opacity:0;transform:translateY(10px);
+  transition:opacity .25s,transform .25s;pointer-events:none;z-index:100;
+}
+.toast.show{opacity:1;transform:translateY(0);pointer-events:auto}
+.toast.error{background:var(--c-danger)}
+.toast.success{background:#16a34a}
+
+/* ── modals ────────────────────────────────────────────── */
+.modal{
+  position:fixed;inset:0;display:flex;align-items:center;justify-content:center;
+  background:rgba(0,0,0,.45);z-index:200;
+}
+.modal.hidden{display:none}
+.modal-box{
+  background:var(--c-surface);border-radius:10px;padding:20px 24px;
+  width:340px;max-width:90vw;box-shadow:0 20px 60px rgba(0,0,0,.25);
+}
+.modal-box.wide{width:600px}
+.modal-title{font-size:15px;font-weight:600;margin-bottom:10px}
+.modal-body{margin-bottom:18px;font-size:14px;line-height:1.5}
+.modal-body input{
+  width:100%;border:1px solid var(--c-border);border-radius:var(--r);
+  padding:8px 10px;font-size:14px;
+}
+.modal-actions{display:flex;justify-content:flex-end;gap:8px}
+.preview-info{font-size:12px;color:var(--c-muted);margin-bottom:10px}
+.preview-scroll{max-height:60vh;overflow:auto;text-align:center;background:#eee;border-radius:var(--r);padding:12px}
+.preview-scroll img{max-width:100%;height:auto;border:1px solid var(--c-border);background:#fff}
+
+/* ── scrollbar styling ─────────────────────────────────── */
+::-webkit-scrollbar{width:7px;height:7px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:#c1c1c1;border-radius:4px}
+::-webkit-scrollbar-thumb:hover{background:#a0a0a0}
