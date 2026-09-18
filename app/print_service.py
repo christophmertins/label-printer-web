@@ -124,10 +124,38 @@ def discover_devices(cfg):
     try:
         from brother_ql.backends import backend_factory
 
+        if cfg.printer.get("backend") == "pyusb" and not _print_lock.locked():
+            # libusb cacht die Geräteliste im langlaufenden Prozess (kein udev/
+            # netlink-Hotplug im Container). Vor jeder Enumeration den Kontext
+            # zurücksetzen, damit USB-Hotplug zuverlässig erkannt wird.
+            # Während eines laufenden Drucks (Lock gehalten) überspringen.
+            _force_libusb_reinit()
         factory = backend_factory(cfg.printer["backend"])
         return factory["list_available_devices"]()
     except Exception as exc:
         raise PrinterUnavailableError(_backend_hint(cfg, exc))
+
+
+def _force_libusb_reinit():
+    """Reset the libusb context so the next enumeration is fresh.
+
+    Uses pyusb's private backend handle; guarded so a version mismatch
+    degrades gracefully (just no re-init)."""
+    try:
+        import usb.backend.libusb1 as libusb1
+
+        obj = getattr(libusb1, "_lib_object", None)
+        if obj is None:
+            return
+        # finalize() statt _finalize_object(): geht durch die Idempotenz-Guard,
+        # sonst wird libusb_exit doppelt aufgerufen (SIGBUS).
+        try:
+            obj.finalize()
+        except Exception:
+            pass
+        libusb1._lib_object = None
+    except Exception:
+        pass
 
 
 def _backend_hint(cfg, exc):
@@ -368,6 +396,11 @@ def print_document(cfg, doc, render_fn):
     from brother_ql.raster import BrotherQLRaster
 
     with _print_lock:
+        if cfg.printer.get("backend") == "pyusb":
+            # libusb-Kontext zurücksetzen, damit auch nach einem USB-Hotplug
+            # frisch enumeriert wird (der Statuspfad überspringt das hier,
+            # weil dieser Thread den Lock bereits hält).
+            _force_libusb_reinit()
         identifier = select_identifier(cfg)
 
         p = cfg.printer
