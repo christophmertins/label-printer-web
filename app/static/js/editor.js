@@ -941,6 +941,26 @@ const Editor = (() => {
 
     window.addEventListener('keydown', onKey);
     window.addEventListener('resize', () => { fitScale(); redraw(); });
+
+    const panelMq = window.matchMedia('(max-width: 860px)');
+    const setPanelState = () => {
+      const mobile = panelMq.matches;
+      document.querySelectorAll('.panel').forEach((p) => {
+        p.classList.toggle('collapsed', mobile);
+      });
+      document.querySelectorAll('.panel h3').forEach((h) => {
+        h.title = mobile ? 'Zum Auf-/Zuklappen tippen' : '';
+      });
+    };
+    document.querySelectorAll('.panel h3').forEach((h) => {
+      h.addEventListener('click', () => {
+        if (!panelMq.matches) return;
+        h.parentElement.classList.toggle('collapsed');
+      });
+    });
+    setPanelState();
+    if (panelMq.addEventListener) panelMq.addEventListener('change', setPanelState);
+    else panelMq.addListener(setPanelState);
   }
 
   return {

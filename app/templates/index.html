@@ -2,7 +2,11 @@
 <html lang="de">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#2563eb">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Etiketten-Studio">
   <title>Etiketten-Studio</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='css/app.css') }}">
 </head>
@@ -23,31 +27,33 @@
   </header>
 
   <section class="toolbar">
-    <div class="tool-group">
+    <div class="tool-group tools-add">
       <button class="btn add-tool" data-tool="text" title="Textelement hinzufügen">Text</button>
       <button class="btn add-tool" data-tool="qr" title="QR-Code-Element hinzufügen">QR-Code</button>
       <button class="btn add-tool" data-tool="image" title="Bild hochladen und einfügen">Bild</button>
       <input type="file" id="imageInput" accept="image/*" hidden>
     </div>
 
-    <div class="tool-group">
-      <label for="labelSelect">Etikett</label>
-      <select id="labelSelect"></select>
-      <label for="lengthInput" id="lengthField">Länge (mm)</label>
-      <input type="number" id="lengthInput" min="10" max="1000" step="5" value="60" disabled>
-      <label for="orientationSelect">Ausrichtung</label>
-      <select id="orientationSelect">
-        <option value="horizontal">Horizontal</option>
-        <option value="vertical">Vertikal</option>
-      </select>
-    </div>
+    <div class="tool-settings">
+      <div class="tool-group">
+        <label for="labelSelect">Etikett</label>
+        <select id="labelSelect"></select>
+        <label for="lengthInput" id="lengthField">Länge (mm)</label>
+        <input type="number" id="lengthInput" min="10" max="1000" step="5" value="60" disabled>
+        <label for="orientationSelect">Ausrichtung</label>
+        <select id="orientationSelect">
+          <option value="horizontal">Horizontal</option>
+          <option value="vertical">Vertikal</option>
+        </select>
+      </div>
 
-    <div class="tool-group template-group">
-      <select id="templateSelect" title="Gespeicherte Vorlagen"><option value="">— Vorlage wählen —</option></select>
-      <button id="btnLoadTemplate" class="btn" disabled>Laden</button>
-      <button id="btnSaveTemplate" class="btn">Speichern</button>
-      <button id="btnDeleteTemplate" class="btn" disabled>Löschen</button>
-      <button id="btnNewDoc" class="btn">Neu</button>
+      <div class="tool-group template-group">
+        <select id="templateSelect" title="Gespeicherte Vorlagen"><option value="">— Vorlage wählen —</option></select>
+        <button id="btnLoadTemplate" class="btn" disabled>Laden</button>
+        <button id="btnSaveTemplate" class="btn">Speichern</button>
+        <button id="btnDeleteTemplate" class="btn" disabled>Löschen</button>
+        <button id="btnNewDoc" class="btn">Neu</button>
+      </div>
     </div>
   </section>
 
