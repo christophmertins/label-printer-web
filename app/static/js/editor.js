@@ -10,6 +10,7 @@ const Editor = (() => {
   const labelSelect = document.getElementById('labelSelect');
   const lengthInput = document.getElementById('lengthInput');
   const lengthField = document.getElementById('lengthField');
+  const orientationSelect = document.getElementById('orientationSelect');
   const layerList = document.getElementById('layerList');
   const propsPanel = document.getElementById('propsPanel');
   const templateSelect = document.getElementById('templateSelect');
@@ -38,7 +39,8 @@ const Editor = (() => {
     const info = S.labels.find((l) => l.id === S.doc.label_id);
     const w = info ? info.width_mm : 62;
     const h = info && info.endless ? (S.doc.label_length_mm || 60) : (info ? info.length_mm : 100);
-    return { w, h, info };
+    const vertical = S.doc.orientation === 'vertical';
+    return { w: vertical ? h : w, h: vertical ? w : h, info };
   };
 
   /* ── id / helpers ─────────────────────────────────────── */
@@ -126,6 +128,7 @@ const Editor = (() => {
       name: 'Neues Etikett',
       label_id: labelId,
       label_length_mm: 60,
+      orientation: 'horizontal',
       elements: [],
     };
     S.selId = null;
@@ -142,6 +145,7 @@ const Editor = (() => {
       name: doc.name || 'Vorlage',
       label_id: S.labels.some((l) => l.id === doc.label_id) ? doc.label_id : S.labels[0].id,
       label_length_mm: doc.label_length_mm || 60,
+      orientation: doc.orientation === 'vertical' ? 'vertical' : 'horizontal',
       elements: Array.isArray(doc.elements) ? doc.elements : [],
     };
     S.selId = null;
@@ -177,6 +181,7 @@ const Editor = (() => {
 
   function syncLabelControls() {
     labelSelect.value = S.doc.label_id;
+    orientationSelect.value = S.doc.orientation || 'horizontal';
     const { info } = docSize();
     const endless = !!(info && info.endless);
     lengthInput.disabled = !endless;
@@ -210,6 +215,16 @@ const Editor = (() => {
     S.doc.label_length_mm = Math.max(10, Math.min(1000, v));
     commit();
     afterDocChange(false);
+  }
+
+  function onOrientationChange() {
+    const v = orientationSelect.value;
+    if (v === S.doc.orientation) return;
+    snapshot();
+    S.doc.orientation = v;
+    S.selId = null;
+    commit();
+    afterDocChange(true);
   }
 
   /* ── element creation ─────────────────────────────────── */
@@ -760,13 +775,19 @@ const Editor = (() => {
     document.getElementById('btnPrint').disabled = true;
     try {
       const data = await apiSend('POST', '/api/print', cloneDoc());
-      toast(data.message || 'Druckauftrag gesendet.', 'success');
+      const errs = data.detail && data.detail.printer_state && data.detail.printer_state.errors;
+      if (errs && errs.length) {
+        toast('Drucker-Fehler: ' + errs.join(' · '), 'error');
+      } else {
+        toast(data.message || 'Druckauftrag gesendet.', 'success');
+      }
       document.getElementById('previewModal').classList.add('hidden');
     } catch (e) {
       toast(e.message || 'Druck fehlgeschlagen.', 'error');
     } finally {
       S.busy = false;
       document.getElementById('btnPrint').disabled = false;
+      refreshStatus();
     }
   }
 
@@ -873,6 +894,7 @@ const Editor = (() => {
     labelSelect.addEventListener('change', onLabelChange);
     lengthInput.addEventListener('input', onLengthChange);
     lengthInput.addEventListener('change', onLengthChange);
+    orientationSelect.addEventListener('change', onOrientationChange);
 
     canvas.addEventListener('pointerdown', startDrag);
     canvas.addEventListener('pointermove', onPointerMove);

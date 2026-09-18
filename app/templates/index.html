@@ -11,7 +11,10 @@
     <div class="brand">Etiketten<span>-Studio</span></div>
     <div class="printer-status" id="printerStatus" title="Drucker-Status">
       <span class="dot" id="printerDot"></span>
-      <span id="printerLabel">Drucker wird geprüft…</span>
+      <div class="printer-info">
+        <span id="printerLabel">Drucker wird geprüft…</span>
+        <span id="printerDetail" class="printer-detail"></span>
+      </div>
     </div>
     <div class="header-actions">
       <button id="btnPreview" class="btn">Vorschau</button>
@@ -32,6 +35,11 @@
       <select id="labelSelect"></select>
       <label for="lengthInput" id="lengthField">Länge (mm)</label>
       <input type="number" id="lengthInput" min="10" max="1000" step="5" value="60" disabled>
+      <label for="orientationSelect">Ausrichtung</label>
+      <select id="orientationSelect">
+        <option value="horizontal">Horizontal</option>
+        <option value="vertical">Vertikal</option>
+      </select>
     </div>
 
     <div class="tool-group template-group">

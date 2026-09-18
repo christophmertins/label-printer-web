@@ -37,6 +37,9 @@ header{
 .brand{font-size:18px;font-weight:700;letter-spacing:.3px}
 .brand span{font-weight:400;color:var(--c-muted)}
 .printer-status{display:flex;align-items:center;gap:6px;margin-left:auto;font-size:13px;color:var(--c-muted)}
+.printer-info{display:flex;flex-direction:column;line-height:1.25}
+.printer-detail{font-size:11px;color:var(--c-muted)}
+.printer-detail.has-error{color:var(--c-danger);font-weight:600}
 .dot{width:9px;height:9px;border-radius:50%;background:var(--c-muted)}
 .dot.on{background:#16a34a}
 .dot.off{background:#dc2626}

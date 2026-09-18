@@ -100,8 +100,11 @@ def render_document(cfg, doc, resolver=None):
     label_id = doc.get("label_id", "62")
     spec = label_spec(label_id)
     endless = is_endless(spec)
+    vertical = doc.get("orientation") == "vertical"
 
     w_mm, h_mm = printable_area_mm(spec, doc.get("label_length_mm"))
+    if vertical:
+        w_mm, h_mm = h_mm, w_mm
     img_w = int(round(w_mm * PX_PER_MM))
     img_h = int(round(h_mm * PX_PER_MM))
 
@@ -130,14 +133,25 @@ def render_document(cfg, doc, resolver=None):
 
         canvas.paste(layer, (x_px, y_px), layer)
 
+    if endless and vertical:
+        # brother_ql forces the image to the tape width (dots_printable[0])
+        # when rasterising endless labels. Mirror that here so the preview
+        # pixel dimensions match the printed output exactly.
+        target_w = spec.dots_printable[0]
+        if img_w != target_w:
+            new_h = max(1, int(round(img_h * target_w / img_w)))
+            canvas = canvas.resize((target_w, new_h), Image.LANCZOS)
+            img_w, img_h = target_w, new_h
+
     meta = {
         "label_id": label_id,
         "label_name": spec.name,
         "endless": endless,
+        "orientation": "vertical" if vertical else "horizontal",
         "width_px": img_w,
         "height_px": img_h,
-        "width_mm": round(w_mm, 2),
-        "height_mm": round(h_mm, 2),
+        "width_mm": round(img_w / PX_PER_MM, 2),
+        "height_mm": round(img_h / PX_PER_MM, 2),
     }
     return canvas, meta
 

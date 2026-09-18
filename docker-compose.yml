@@ -6,16 +6,14 @@ services:
     restart: unless-stopped
     ports:
       - "5001:5001"
-    # USB-Passthrough für den Brother QL-500 (Linux-Hosts).
-    # Hinweis macOS: Docker Desktop leitet USB standardmäßig NICHT durch.
-    # Siehe README -> Abschnitt "Drucker im Docker-Container".
-    devices:
-      - "/dev/bus/usb:/dev/bus/usb"
+    # USB-Drucker (Brother QL-500) via libusb (pyusb) über /dev/bus/usb.
+    # Dieses Verzeichnis ist stabil und spiegelt Hotplug dynamisch, daher ist
+    # nach dem Umstecken des Druckers kein Container-/LXC-Neustart nötig.
     privileged: true
     volumes:
       - ./config:/app/config
       - ./templates:/app/templates
+      - /dev/bus/usb:/dev/bus/usb
     environment:
       - BROTHER_MODEL=QL-500
       - BROTHER_BACKEND=pyusb
-      # - BROTHER_PRINTER=usb://0x04f9:0x2015   # optional, sonst Auto-Erkennung

@@ -30,19 +30,46 @@ function refreshStatus() {
     .then((s) => {
       const dot = document.getElementById('printerDot');
       const label = document.getElementById('printerLabel');
+      const detail = document.getElementById('printerDetail');
       const box = document.getElementById('printerStatus');
       dot.classList.toggle('on', !!s.connected);
       dot.classList.toggle('off', !s.connected);
-      label.textContent = s.connected
-        ? `Drucker verbunden (${s.model || ''})`.trim()
-        : 'Drucker nicht verbunden / aus';
-      box.title = s.connected ? `Gerät: ${s.identifier}` : (s.error || '');
+      if (s.connected) {
+        label.textContent = `Drucker verbunden (${s.model || ''})`.trim();
+        detail.textContent = formatPrinterState(s.state);
+        detail.classList.toggle('has-error', !!(s.state && s.state.errors && s.state.errors.length));
+        box.title = `Gerät: ${s.identifier}`;
+      } else {
+        label.textContent = 'Drucker nicht verbunden / aus';
+        detail.textContent = s.error || '';
+        detail.classList.add('has-error');
+        box.title = s.error || '';
+      }
     })
     .catch(() => {
       const dot = document.getElementById('printerDot');
       dot.classList.add('off');
       document.getElementById('printerLabel').textContent = 'Status unbekannt';
     });
+}
+
+function formatPrinterState(state) {
+  if (!state) return '';
+  const parts = [];
+  if (state.media_type && state.media_type !== 'Kein Medium') {
+    let m = state.media_type;
+    if (state.media_width_mm) m += ` ${state.media_width_mm} mm`;
+    if (state.media_length_mm) m += ` × ${state.media_length_mm} mm`;
+    parts.push(m);
+  }
+  if (state.errors && state.errors.length) {
+    parts.push('⚠ ' + state.errors.join(' · '));
+  } else if (state.phase_type) {
+    parts.push(state.phase_type);
+  } else if (state.status_type) {
+    parts.push(state.status_type);
+  }
+  return parts.join(' · ');
 }
 
 async function loadWebFonts() {
