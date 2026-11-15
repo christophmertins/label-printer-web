@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.1
+
+- Standard für `print_proxy_url` korrigiert: `http://10.0.0.225:5001`
+  (die Instanz am Drucker lauscht auf 5001, nicht 8001).
+- Hinweis, dass das Addon-Repository öffentlich sein muss.
+
 ## 1.0.0
 
 - Erste Version als Home-Assistant-Addon: Ingress-Panel, Option

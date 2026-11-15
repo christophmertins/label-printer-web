@@ -1,5 +1,5 @@
 name: "Etiketten-Studio (Brother QL)"
-version: "1.0.0"
+version: "1.0.1"
 slug: "label_printer"
 description: "Etiketten für Brother QL-Drucker gestalten, als Vorlage speichern und über die Instanz am Drucker ausgeben."
 url: "https://github.com/christophmertins/label-printer-web"
@@ -18,6 +18,6 @@ boot: auto
 backup: hot
 watchdog: "http://[HOST]:[PORT:5001]/"
 options:
-  print_proxy_url: "http://10.0.0.225:8001"
+  print_proxy_url: "http://10.0.0.225:5001"
 schema:
   print_proxy_url: "str?"

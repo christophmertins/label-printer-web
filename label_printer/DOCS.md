@@ -29,7 +29,7 @@ bewusst ohne Home Assistant erreichst.
 | | |
 |---|---|
 | Typ | Text, optional |
-| Standard | `http://10.0.0.225:8001` |
+| Standard | `http://10.0.0.225:5001` |
 
 Basis-URL der Instanz, die den Drucker besitzt. Ein Pfad-Präfix ist erlaubt
 (`http://host:port/etiketten`). Leer lassen, wenn das Addon selbst drucken

@@ -12,6 +12,8 @@ Zwei Betriebsarten, ein Code:
   in HA unter *Einstellungen → Apps → App installieren → ⋮ → Repositories*
   eintragen, dann „Etiketten-Studio (Brother QL)" installieren.
   Details: [`label_printer/DOCS.md`](label_printer/DOCS.md).
+  Das Repository muss öffentlich sein – der Supervisor klont Addon-Repositories
+  ohne Zugangsdaten.
 - **Docker-Standalone** – `docker compose up --build -d`, UI auf
   `http://localhost:5001`.
 

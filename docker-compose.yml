@@ -18,4 +18,4 @@ services:
       - BROTHER_MODEL=QL-500
       - BROTHER_BACKEND=pyusb
       # Optional: Druck an eine andere Instanz am Drucker abgeben
-      # - LABEL_WEB_PRINT_PROXY=http://10.0.0.225:8001
+      # - LABEL_WEB_PRINT_PROXY=http://10.0.0.225:5001

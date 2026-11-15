@@ -2,7 +2,7 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:executing-plans. Steps use checkbox (`- [ ]`) syntax.
 
-**Goal:** Die Flask-App als Home-Assistant-Addon ausliefern, bedienbar über Ingress, druckend über die bestehende Instanz auf `http://10.0.0.225:8001`.
+**Goal:** Die Flask-App als Home-Assistant-Addon ausliefern, bedienbar über Ingress, druckend über die bestehende Instanz auf `http://10.0.0.225:5001`.
 
 **Architecture:** App zieht nach `label_printer/` (Addon-Ordner = Build-Kontext), HA-Base-Python-Image, Ingress-Middleware + relative JS-Pfade, Druck per HTTP-Proxy an die Alt-Instanz, Vorlagen in `/data`.
 
@@ -12,7 +12,7 @@
 
 ## Global Constraints
 
-- Genau eine Addon-Option: `print_proxy_url`, Default `http://10.0.0.225:8001`.
+- Genau eine Addon-Option: `print_proxy_url`, Default `http://10.0.0.225:5001`.
 - Addon bekommt keinen USB-Zugriff (`usb`, `full_access` bleiben aus); `init: false`, `ingress: true`, `ingress_port: 5001`.
 - Keine neuen Python-Abhängigkeiten (Proxy über `urllib.request`).
 - Docker-Compose-Betrieb muss weiter funktionieren.

@@ -41,7 +41,7 @@ der HA-Sidebar, Optionen in der HA-Oberfläche, Vorlagen im Addon-Speicher
 - Ingress: Supervisor entfernt den Pfad-Präfix, setzt aber `X-Ingress-Path`.
 - `brother_ql` kann den lokalen Druck über pyusb/linux_kernel/netzwerk; im
   Addon wird davon nur gerendert und (falls kein Proxy gesetzt ist) gedruckt.
-- Die Alt-Instanz läuft unter `http://10.0.0.225:8001` und ist ein Checkout
+- Die Alt-Instanz läuft unter `http://10.0.0.225:5001` und ist ein Checkout
   dieses Repos; Abweichungen der Version zeigen sich als klare Fehlermeldung
   statt als stiller Fehlschlag.
 - Der Druckerzustand und die Etikettliste kommen bei gesetztem Proxy von der
@@ -110,7 +110,7 @@ die kurze README.
 
 - `AppConfig.printer["print_proxy_url"]` (Env `LABEL_WEB_PRINT_PROXY`),
   Default leer. Ein vollständiger Basis-URL, z. B.
-  `http://10.0.0.225:8001` (HTTP, optional mit Pfad; Endpunkte werden per
+  `http://10.0.0.225:5001` (HTTP, optional mit Pfad; Endpunkte werden per
   `urllib.parse.urljoin` gebildet, nicht per String-Konkatenation).
 - `print_service.print_document`: ist der Proxy gesetzt, wird das Dokument als
   JSON per `urllib.request` (Timeout 120 s) an `<proxy>/api/print` gepostet;
@@ -132,7 +132,7 @@ die kurze README.
   `panel_icon: mdi:label-outline`, `panel_title: Etiketten`, `arch: [aarch64,
   amd64]`, `map: []`, `backup: hot`.
 - Optionen/Schema: ausschließlich `print_proxy_url` (str, Default
-  `http://10.0.0.225:8001`). Keine Druckeroptionen im Addon (siehe oben).
+  `http://10.0.0.225:5001`). Keine Druckeroptionen im Addon (siehe oben).
 - `run.sh`: liest die Option per bashio (falls vorhanden; sonst
   `LABEL_WEB_PRINT_PROXY` aus der Umgebung, damit `docker compose` ohne
   Supervisor funktioniert), kopiert `labels.json` und die Beispielvorlagen aus
