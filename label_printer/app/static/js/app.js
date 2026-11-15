@@ -12,7 +12,7 @@
 
   let cfg;
   try {
-    cfg = await fetch('/api/config').then((r) => r.json());
+    cfg = await fetch('api/config').then((r) => r.json());
   } catch (e) {
     document.getElementById('toast').textContent = 'Backend nicht erreichbar.';
     document.getElementById('toast').className = 'toast show error';
@@ -25,7 +25,7 @@
 })();
 
 function refreshStatus() {
-  fetch('/api/status')
+  fetch('api/status')
     .then((r) => r.json())
     .then((s) => {
       const dot = document.getElementById('printerDot');

@@ -17,6 +17,14 @@ def _cfg():
 @api.get("/config")
 def get_config():
     cfg = _cfg()
+    base = print_service.proxy_base(cfg)
+    if base:
+        try:
+            status, payload = print_service.proxy_json(cfg, "/api/config", timeout=15)
+            if status < 400 and isinstance(payload, dict):
+                return jsonify(payload)
+        except print_service.PrinterUnavailableError as exc:
+            log.warning("Etikettliste der Alt-Instanz nicht abrufbar: %s", exc)
     labels = []
     for entry in cfg.labels:
         lid = entry.get("id", entry) if isinstance(entry, dict) else entry

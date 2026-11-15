@@ -689,7 +689,7 @@ const Editor = (() => {
 
   async function refreshTemplates() {
     try {
-      const data = await apiGet('/api/templates');
+      const data = await apiGet('api/templates');
       S.templates = data.templates || [];
     } catch (e) {
       S.templates = [];
@@ -712,7 +712,7 @@ const Editor = (() => {
     if (!file) return;
     if (S.dirty && !await confirm('Ungespeicherte Änderungen werden verworfen. Fortfahren?')) return;
     try {
-      const doc = await apiGet('/api/templates/' + encodeURIComponent(file));
+      const doc = await apiGet('api/templates/' + encodeURIComponent(file));
       importDoc(doc);
       S.lastSaveName = doc.name || file;
       toast(`Vorlage „${file}“ geladen.`, 'success');
@@ -727,7 +727,7 @@ const Editor = (() => {
       try {
         const doc = cloneDoc();
         doc.name = name;
-        await apiSend('PUT', '/api/templates/' + encodeURIComponent(name), doc);
+        await apiSend('PUT', 'api/templates/' + encodeURIComponent(name), doc);
         S.lastSaveName = name;
         S.dirty = false;
         document.title = 'Etiketten-Studio';
@@ -746,7 +746,7 @@ const Editor = (() => {
     if (!file) return;
     if (!await confirm(`Vorlage „${file}“ wirklich löschen?`)) return;
     try {
-      await apiSend('DELETE', '/api/templates/' + encodeURIComponent(file));
+      await apiSend('DELETE', 'api/templates/' + encodeURIComponent(file));
       toast(`Vorlage „${file}“ gelöscht.`, 'success');
       await refreshTemplates();
     } catch (e) {
@@ -761,7 +761,7 @@ const Editor = (() => {
   /* ── preview & print ──────────────────────────────────── */
 
   async function showPreview() {
-    const data = await apiSend('POST', '/api/preview', cloneDoc());
+    const data = await apiSend('POST', 'api/preview', cloneDoc());
     const img = document.getElementById('previewImg');
     img.src = data.image;
     document.getElementById('previewInfo').textContent =
@@ -774,7 +774,7 @@ const Editor = (() => {
     S.busy = true;
     document.getElementById('btnPrint').disabled = true;
     try {
-      const data = await apiSend('POST', '/api/print', cloneDoc());
+      const data = await apiSend('POST', 'api/print', cloneDoc());
       const errs = data.detail && data.detail.printer_state && data.detail.printer_state.errors;
       if (errs && errs.length) {
         toast('Drucker-Fehler: ' + errs.join(' · '), 'error');

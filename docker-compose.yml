@@ -1,6 +1,6 @@
 services:
   label-printer-web:
-    build: .
+    build: ./label_printer
     image: label-printer-web:latest
     container_name: label-printer-web
     restart: unless-stopped
@@ -11,9 +11,11 @@ services:
     # nach dem Umstecken des Druckers kein Container-/LXC-Neustart nötig.
     privileged: true
     volumes:
-      - ./config:/app/config
-      - ./templates:/app/templates
+      # Persistente Daten: labels.json, printer.json, templates/
+      - ./label_printer/data:/data
       - /dev/bus/usb:/dev/bus/usb
     environment:
       - BROTHER_MODEL=QL-500
       - BROTHER_BACKEND=pyusb
+      # Optional: Druck an eine andere Instanz am Drucker abgeben
+      # - LABEL_WEB_PRINT_PROXY=http://10.0.0.225:8001

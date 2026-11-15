@@ -1,0 +1,4 @@
+configuration:
+  print_proxy_url:
+    name: "Instanz am Drucker"
+    description: "Basis-URL der Etiketten-Instanz, die den Brother-Drucker per USB besitzt, z. B. http://10.0.0.225:8001. Leer lassen, wenn das Addon selbst drucken soll."

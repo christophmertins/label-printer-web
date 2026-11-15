@@ -1,7 +1,11 @@
+import json
 import os
 import select
 import threading
 import time
+import urllib.error
+import urllib.request
+from urllib.parse import urljoin
 
 _print_lock = threading.Lock()
 
@@ -113,6 +117,37 @@ class PrinterUnavailableError(Exception):
 
 class LabelError(Exception):
     pass
+
+
+def proxy_base(cfg):
+    """Base URL of the instance that owns the printer, empty when unset."""
+    return (cfg.printer.get("print_proxy_url") or "").strip().rstrip("/")
+
+
+def proxy_json(cfg, path, payload=None, timeout=120):
+    """Call the printer-owning instance. Returns (http_status, json_dict)."""
+    base = proxy_base(cfg)
+    url = urljoin(base + "/", path.lstrip("/"))
+    body = json.dumps(payload).encode("utf-8") if payload is not None else None
+    request = urllib.request.Request(
+        url, data=body, headers={"Content-Type": "application/json"}
+    )
+    try:
+        with urllib.request.urlopen(request, timeout=timeout) as response:
+            status, raw = response.status, response.read()
+    except urllib.error.HTTPError as exc:
+        status, raw = exc.code, exc.read()
+    except Exception as exc:
+        raise PrinterUnavailableError(
+            f"Alt-Instanz {base} nicht erreichbar. Läuft dort die Etiketten-Instanz "
+            f"mit dem Drucker? ({exc})"
+        )
+    try:
+        return status, json.loads(raw.decode("utf-8", "replace"))
+    except ValueError:
+        raise PrinterUnavailableError(
+            f"Alt-Instanz {base} antwortet unerwartet (andere Version?)."
+        )
 
 
 def discover_devices(cfg):
@@ -373,6 +408,16 @@ def read_printer_status(cfg):
 
 def printer_status(cfg):
     """Check whether a printer is reachable. Never raises."""
+    base = proxy_base(cfg)
+    if base:
+        try:
+            status, payload = proxy_json(cfg, "/api/status", timeout=15)
+        except PrinterUnavailableError as exc:
+            return {"connected": False, "error": str(exc), "state": None}
+        if status < 400 and isinstance(payload, dict):
+            return payload
+        message = payload.get("message") if isinstance(payload, dict) else None
+        return {"connected": False, "error": message or f"{base}: HTTP {status}", "state": None}
     try:
         identifier = select_identifier(cfg)
     except PrinterUnavailableError as exc:
@@ -391,6 +436,18 @@ def printer_status(cfg):
 def print_document(cfg, doc, render_fn):
     """Render and send a document to the printer."""
     global _last_state
+    base = proxy_base(cfg)
+    if base:
+        # Die Instanz am Drucker rastersiert selbst, also gelten dort ihre
+        # Druckereinstellungen; hier wird nur das Dokument weitergereicht.
+        status, payload = proxy_json(cfg, "/api/print", doc)
+        if status >= 400 or not (isinstance(payload, dict) and payload.get("ok")):
+            message = payload.get("message") if isinstance(payload, dict) else None
+            raise PrinterUnavailableError(
+                message or f"Druck über {base} fehlgeschlagen (HTTP {status})."
+            )
+        return payload.get("detail") or {"proxy": base}
+
     from brother_ql.backends.helpers import send
     from brother_ql.conversion import convert
     from brother_ql.raster import BrotherQLRaster

@@ -12,6 +12,7 @@ DEFAULT_PRINTER = {
     "hq": True,
     "cut": True,
     "rotate": "auto",
+    "print_proxy_url": "",
 }
 
 DEFAULT_LABELS = [
@@ -52,6 +53,7 @@ class AppConfig:
             ("model", "BROTHER_MODEL"),
             ("backend", "BROTHER_BACKEND"),
             ("printer", "BROTHER_PRINTER"),
+            ("print_proxy_url", "LABEL_WEB_PRINT_PROXY"),
         ):
             if os.environ.get(env):
                 self.printer[key] = os.environ[env]

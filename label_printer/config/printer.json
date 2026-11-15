@@ -8,5 +8,6 @@
   "dpi_600": false,
   "hq": true,
   "cut": true,
-  "rotate": "auto"
+  "rotate": "auto",
+  "print_proxy_url": ""
 }
