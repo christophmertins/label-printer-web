@@ -124,7 +124,14 @@ def proxy_base(cfg):
     return (cfg.printer.get("print_proxy_url") or "").strip().rstrip("/")
 
 
-def proxy_json(cfg, path, payload=None, timeout=120):
+# Ein Druckauftrag braucht nur das Rendern und die USB-Übertragung der
+# Gegenseite; Status und Etikettliste müssen die UI nicht minutenlang warten
+# lassen, wenn der Rechner aus ist.
+PROXY_TIMEOUT = 30
+PROXY_QUICK_TIMEOUT = 2.5
+
+
+def proxy_json(cfg, path, payload=None, timeout=PROXY_TIMEOUT):
     """Call the printer-owning instance. Returns (http_status, json_dict)."""
     base = proxy_base(cfg)
     url = urljoin(base + "/", path.lstrip("/"))
@@ -411,10 +418,10 @@ def printer_status(cfg):
     base = proxy_base(cfg)
     if base:
         try:
-            status, payload = proxy_json(cfg, "/api/status", timeout=15)
+            status, payload = proxy_json(cfg, "/api/status", timeout=PROXY_QUICK_TIMEOUT)
         except PrinterUnavailableError as exc:
             return {"connected": False, "error": str(exc), "state": None}
-        if status < 400 and isinstance(payload, dict):
+        if status < 400 and isinstance(payload, dict) and "connected" in payload:
             return payload
         message = payload.get("message") if isinstance(payload, dict) else None
         return {"connected": False, "error": message or f"{base}: HTTP {status}", "state": None}
@@ -441,12 +448,17 @@ def print_document(cfg, doc, render_fn):
         # Die Instanz am Drucker rastersiert selbst, also gelten dort ihre
         # Druckereinstellungen; hier wird nur das Dokument weitergereicht.
         status, payload = proxy_json(cfg, "/api/print", doc)
-        if status >= 400 or not (isinstance(payload, dict) and payload.get("ok")):
-            message = payload.get("message") if isinstance(payload, dict) else None
+        ok = isinstance(payload, dict) and payload.get("ok")
+        message = payload.get("message") if isinstance(payload, dict) else None
+        if 400 <= status < 500 and not ok:
+            # Die Gegenseite hat den Auftrag abgelehnt (z. B. unbekanntes
+            # Etikett) – das ist kein Ausfall des Druckers.
+            raise LabelError(message or f"Auftrag von {base} abgelehnt (HTTP {status}).")
+        if status >= 400 or not ok:
             raise PrinterUnavailableError(
                 message or f"Druck über {base} fehlgeschlagen (HTTP {status})."
             )
-        return payload.get("detail") or {"proxy": base}
+        return payload
 
     from brother_ql.backends.helpers import send
     from brother_ql.conversion import convert

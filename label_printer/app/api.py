@@ -20,9 +20,12 @@ def get_config():
     base = print_service.proxy_base(cfg)
     if base:
         try:
-            status, payload = print_service.proxy_json(cfg, "/api/config", timeout=15)
-            if status < 400 and isinstance(payload, dict):
+            status, payload = print_service.proxy_json(
+                cfg, "/api/config", timeout=print_service.PROXY_QUICK_TIMEOUT
+            )
+            if status < 400 and isinstance(payload, dict) and "labels" in payload:
                 return jsonify(payload)
+            log.warning("Alt-Instanz liefert keine Etikettliste (HTTP %s).", status)
         except print_service.PrinterUnavailableError as exc:
             log.warning("Etikettliste der Alt-Instanz nicht abrufbar: %s", exc)
     labels = []
@@ -143,4 +146,7 @@ def print_label():
         log.exception("Unerwarteter Druckfehler")
         return jsonify({"ok": False, "message": f"Unerwarteter Fehler: {exc}"}), 500
 
-    return jsonify({"ok": True, "message": "Druckauftrag gesendet.", "detail": result})
+    message = result.get("message") if isinstance(result, dict) else None
+    return jsonify(
+        {"ok": True, "message": message or "Druckauftrag gesendet.", "detail": result}
+    )

@@ -9,6 +9,8 @@ arch:
 init: false
 ingress: true
 ingress_port: 5001
+ports:
+  "5001/tcp": null
 panel_icon: "mdi:label-outline"
 panel_title: "Etiketten"
 startup: application

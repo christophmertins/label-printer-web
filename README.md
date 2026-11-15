@@ -44,6 +44,15 @@ docker compose up --build -d
 # UI:  http://localhost:5001
 ```
 
+**Update von einer älteren Version:** Die App liegt jetzt in `label_printer/`,
+die Daten in `label_printer/data/`. Einmalig übernehmen:
+
+```bash
+mkdir -p label_printer/data/templates
+cp -n config/*.json label_printer/data/ 2>/dev/null
+cp -n templates/*.json label_printer/data/templates/ 2>/dev/null
+```
+
 Das `docker-compose.yml` reicht `/dev/bus/usb` in den Container durch
 (`privileged: true`) und legt die Daten unter `label_printer/data/` ab.
 
@@ -61,7 +70,8 @@ python3 -m venv .venv
 source .venv/bin/activate
 pip install -r label_printer/requirements.txt
 
-cd label_printer && LABEL_WEB_DATA_DIR=$PWD/data python run.py
+cd label_printer
+LABEL_WEB_CONFIG_DIR=$PWD/data LABEL_WEB_TEMPLATES_DIR=$PWD/data/templates python run.py
 # UI:  http://localhost:5001
 ```
 

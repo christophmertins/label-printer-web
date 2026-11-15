@@ -761,7 +761,13 @@ const Editor = (() => {
   /* ── preview & print ──────────────────────────────────── */
 
   async function showPreview() {
-    const data = await apiSend('POST', 'api/preview', cloneDoc());
+    let data;
+    try {
+      data = await apiSend('POST', 'api/preview', cloneDoc());
+    } catch (e) {
+      toast(e.message || 'Vorschau fehlgeschlagen.', 'error');
+      return;
+    }
     const img = document.getElementById('previewImg');
     img.src = data.image;
     document.getElementById('previewInfo').textContent =

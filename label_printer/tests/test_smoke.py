@@ -4,6 +4,7 @@ import json
 import os
 import sys
 import threading
+import time
 import unittest
 from http.server import BaseHTTPRequestHandler, HTTPServer
 
@@ -35,6 +36,11 @@ class IngressTest(unittest.TestCase):
             self.assertNotIn("fetch('/api/", code, name)
             self.assertNotIn("'/api/", code, name)
 
+    def test_foreign_ingress_prefix_is_ignored(self):
+        html = self.client.get("/", headers={"X-Ingress-Path": "//evil.example"}).get_data(as_text=True)
+        self.assertIn('<base href="/">', html)
+        self.assertNotIn("evil.example", html)
+
 
 class _Stub(BaseHTTPRequestHandler):
     """Minimaler Ersatz für die Alt-Instanz."""
@@ -53,6 +59,8 @@ class _Stub(BaseHTTPRequestHandler):
     def do_GET(self):
         type(self).calls.append(("GET", self.path, None))
         status, payload = type(self).routes.get(self.path, (404, {"ok": False, "message": "nicht gefunden"}))
+        if isinstance(payload, dict) and payload.get("__sleep__"):
+            time.sleep(payload["__sleep__"])
         self._reply(status, payload)
 
     def do_POST(self):
@@ -121,6 +129,29 @@ class ProxyTest(unittest.TestCase):
         _Stub.routes.pop("/api/config")
         labels = self.client.get("/api/config").get_json()["labels"]
         self.assertTrue(labels)
+
+    def test_foreign_json_is_not_served_as_config(self):
+        _Stub.routes["/api/config"] = (200, {"status": "error", "message": "login required"})
+        labels = self.client.get("/api/config").get_json()["labels"]
+        self.assertTrue(labels)
+
+    def test_hanging_proxy_falls_back_quickly(self):
+        _Stub.routes["/api/config"] = (200, {"__sleep__": 5, "labels": []})
+        started = time.monotonic()
+        labels = self.client.get("/api/config").get_json()["labels"]
+        self.assertLess(time.monotonic() - started, 4.0)
+        self.assertTrue(labels)
+
+    def test_remote_rejection_is_not_reported_as_unavailable(self):
+        _Stub.routes["/api/print"] = (400, {"ok": False, "message": "Etikett kann nicht gerastert werden"})
+        resp = self.client.post("/api/print", json={"label_id": "62", "elements": []})
+        self.assertEqual(resp.status_code, 400)
+        self.assertIn("gerastert", resp.get_json()["message"])
+
+    def test_remote_success_message_is_shown(self):
+        _Stub.routes["/api/print"] = (200, {"ok": True, "message": "Druckauftrag an QL-500 gesendet"})
+        resp = self.client.post("/api/print", json={"label_id": "62", "elements": []})
+        self.assertIn("QL-500", resp.get_json()["message"])
 
 
 if __name__ == "__main__":

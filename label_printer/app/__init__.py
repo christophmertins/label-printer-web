@@ -18,6 +18,10 @@ class IngressPrefix:
 
     def __call__(self, environ, start_response):
         prefix = (environ.get("HTTP_X_INGRESS_PATH") or "").rstrip("/")
+        # Nur echte Pfade: ein protokollrelativer Wert würde das <base>-Tag
+        # auf eine fremde Origin umbiegen.
+        if prefix.startswith("//") or (prefix and not prefix.startswith("/")):
+            prefix = ""
         if prefix:
             path = environ.get("PATH_INFO", "")
             if path.startswith(prefix):

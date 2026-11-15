@@ -52,6 +52,10 @@ Druckerstatus werden ebenfalls von dort geholt, damit die Auswahl im Editor zur
 echten Hardware passt. Ist die Gegenseite nicht erreichbar, zeigt der Editor
 die mitgelieferte Etikettliste und im Kopfbereich eine Fehlermeldung.
 
+Die **Vorschau** (300 dpi) entsteht im Addon. Dithering, Schwellwert und
+Drehung wendet erst die Gegenseite beim Drucken an – bei Foto-/Bild-Elementen
+kann der Ausdruck deshalb minimal anders aussehen als die Vorschau.
+
 ## Daten und Backup
 
 Alles Persistente liegt in `/data`:
