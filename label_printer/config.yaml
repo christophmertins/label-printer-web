@@ -1,5 +1,5 @@
 name: "Etiketten-Studio (Brother QL)"
-version: "1.0.1"
+version: "1.0.2"
 slug: "label_printer"
 description: "Etiketten für Brother QL-Drucker gestalten, als Vorlage speichern und über die Instanz am Drucker ausgeben."
 url: "https://github.com/christophmertins/label-printer-web"

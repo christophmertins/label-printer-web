@@ -122,13 +122,14 @@ const Editor = (() => {
   }
 
   function newDoc() {
-    const info = S.labels[0];
+    // Hausstandard: 29 × 90 mm hochkant.
+    const info = S.labels.find((l) => l.id === '29x90') || S.labels[0];
     const labelId = info ? info.id : '62';
     S.doc = {
       name: 'Neues Etikett',
       label_id: labelId,
       label_length_mm: 60,
-      orientation: 'horizontal',
+      orientation: 'vertical',
       elements: [],
     };
     S.selId = null;

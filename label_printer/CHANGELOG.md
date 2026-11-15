@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.0.2
+
+- Standard für neue Etiketten: 29 × 90 mm, Ausrichtung vertikal.
+
 ## 1.0.1
 
 - Standard für `print_proxy_url` korrigiert: `http://10.0.0.225:5001`
