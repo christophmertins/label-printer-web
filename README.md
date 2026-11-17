@@ -36,6 +36,8 @@ benötigt den eingeschalteten Drucker.
 - **Offline-fähig**: Alles außer Drucken läuft auch ohne Drucker/Libusb.
 - **WYSIWYG**: Browser-Vorschau nutzt exakt dieselben DejaVu-Schriftdateien
   wie der Server (keine Font-Abweichungen zwischen Vorschau und Druck).
+- **Hell/Dunkel**: Umschalter im Kopfbereich; ohne eigene Wahl folgt die App
+  dem Systemdesign, die Wahl wird im Browser gespeichert.
 
 ---
 

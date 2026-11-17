@@ -36,6 +36,11 @@ class IngressTest(unittest.TestCase):
             self.assertNotIn("fetch('/api/", code, name)
             self.assertNotIn("'/api/", code, name)
 
+    def test_theme_switch_is_shipped(self):
+        html = self.client.get("/").get_data(as_text=True)
+        self.assertIn('id="btnTheme"', html)
+        self.assertIn('js/theme.js', html)
+
     def test_foreign_ingress_prefix_is_ignored(self):
         html = self.client.get("/", headers={"X-Ingress-Path": "//evil.example"}).get_data(as_text=True)
         self.assertIn('<base href="/">', html)

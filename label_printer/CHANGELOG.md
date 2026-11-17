@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.0.4
+
+- Hell/Dunkel-Umschalter im Kopfbereich. Ohne eigene Wahl folgt die App
+  dem Systemdesign, ein Klick setzt eine feste Wahl (im Browser gespeichert).
+
+## 1.0.3
+
+- Panel auch für Nicht-Administratoren sichtbar (`panel_admin: false`).
+
 ## 1.0.2
 
 - Standard für neue Etiketten: 29 × 90 mm, Ausrichtung vertikal.

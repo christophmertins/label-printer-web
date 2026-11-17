@@ -10,6 +10,7 @@
   <title>Etiketten-Studio</title>
   <base href="{{ request.script_root }}/">
   <link rel="stylesheet" href="{{ url_for('static', filename='css/app.css') }}">
+  <script src="{{ url_for('static', filename='js/theme.js') }}"></script>
 </head>
 <body>
   <header>
@@ -22,6 +23,7 @@
       </div>
     </div>
     <div class="header-actions">
+      <button id="btnTheme" class="btn btn-icon" title="Design wechseln" aria-label="Dunkelmodus umschalten"></button>
       <button id="btnPreview" class="btn">Vorschau</button>
       <button id="btnPrint" class="btn btn-primary">Drucken</button>
     </div>
